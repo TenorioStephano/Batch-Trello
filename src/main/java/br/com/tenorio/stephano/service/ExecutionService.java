@@ -1,6 +1,8 @@
 package br.com.tenorio.stephano.service;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,10 @@ public class ExecutionService {
 	
 	public void updateDateExecution() {
 		Execution execution = getExecution();
-		execution.setDateOfLastExecution(new Date());
+		TimeZone tz = TimeZone.getTimeZone("America/Sao_Paulo");
+		TimeZone.setDefault(tz);
+		Calendar ca = GregorianCalendar.getInstance(tz);
+		execution.setDateOfLastExecution(ca.getTime());
 		executionRepository.save(execution);
 	}
 }

@@ -3,6 +3,7 @@ package br.com.tenorio.stephano.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -72,9 +73,13 @@ public class TrelloRestService extends BaseRest {
 			.append(demand.getDateLastCommentScuaFormatted())
 			.append(" para: '")
 			.append(demand.getStatusScua())
-			.append("' com o seguinte comentário: '")
+			.append("' ");
+		if(StringUtils.isNotBlank(demand.getLastCommentScua())) {
+			comment.append("com o seguinte comentário: '")
 			.append(demand.getLastCommentScua())
-			.append("' por favor verificar ")
+			.append("' ");
+		}
+		comment.append("por favor verificar ")
 			.append(membersDefault);
 		postResponse(getFormatedRequest("cards/" + demand.getIdTrello() + "/actions/comments?text=" + comment.toString()), String.class);
 	}

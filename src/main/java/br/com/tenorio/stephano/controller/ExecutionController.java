@@ -1,6 +1,7 @@
 package br.com.tenorio.stephano.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,20 +14,22 @@ import br.com.tenorio.stephano.service.ExecutionService;
 @RestController
 @RequestMapping("/execution")
 public class ExecutionController {
-	
+
 	@Autowired
 	private ExecutionService executionService;
-	
+
 	@Autowired
 	private JobsSchedules jobsSchedules;
-	
+
 	@GetMapping("/last")
 	public Execution lastExecution() {
 		return executionService.getExecution();
 	}
-	
+
 	@PostMapping("/executeNow")
+	@Async
 	public void executeNow() {
 		jobsSchedules.getDemandsAndUpdateNewsStatusOnTrelloAndDatabase();
 	}
+
 }

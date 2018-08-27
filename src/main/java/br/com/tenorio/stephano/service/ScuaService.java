@@ -98,7 +98,7 @@ public class ScuaService extends BaseRest {
 	}
 
 	private String getChild(Elements children, int column) {
-		return children.get(column).toString().replaceAll("<.*?>", "").trim();
+		return children.get(column).toString().replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ").replace("&nbsp;", "").trim();
 	}
 
 	private LastCommentScua convertElementsToLastCommentScua(Elements elements) {
