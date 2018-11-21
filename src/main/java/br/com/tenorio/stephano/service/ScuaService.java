@@ -19,12 +19,15 @@ import br.com.tenorio.stephano.base.BaseRest;
 import br.com.tenorio.stephano.entity.Demand;
 import br.com.tenorio.stephano.model.LastCommentScua;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ScuaService extends BaseRest {
 
 	private static final Logger log = LoggerFactory.getLogger(ScuaService.class);
 	
-	private String cookie;
+	private List<String> cookies;
 	private String acceptLanguage;
 	private String accept;
 	private Integer actionDateColumn;
@@ -72,7 +75,7 @@ public class ScuaService extends BaseRest {
 		urlScua = env.getProperty("URL_SCUA");
 		userAgent = env.getProperty("USER_AGENT");
 		userColumn = Integer.parseInt(env.getProperty("USER_COLUMN"));
-		cookie = getCookie();
+		cookies = getCookies();
 	}
 
 	public Demand getLastCommentScua(Demand demand) {
@@ -92,7 +95,7 @@ public class ScuaService extends BaseRest {
 
 	public String getResponseScua(String demandId) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Cookie", this.cookie);
+		headers.addAll("Cookie", this.cookies);
 		setHeaders(headers);
 		return (String) getResponse(urlDemandScua + demandId, String.class);
 	}
@@ -114,14 +117,15 @@ public class ScuaService extends BaseRest {
 		return lastCommentScua;
 	}
 
-	public String getCookie() {
+	public List<String> getCookies() {
 		super.setHeaders(getHeaders());
 		ResponseEntity<String> response = postResponse(urlScua, getParameters());
 		try {
 			HttpHeaders headers = response.getHeaders();
-			return headers.getFirst(HttpHeaders.SET_COOKIE).split(" ")[0].replace(";", "");
+//            return headers.getFirst(HttpHeaders.SET_COOKIE).split(" ")[0].replace(";", "");
+            return headers.get(HttpHeaders.SET_COOKIE);
 		} catch (Exception e) {
-			log.error(String.format("Erro no login do scua, erro: '%s', StackTrace: %s", e.getMessage(), e));
+			log.error("Erro no login do Scua, erro: '{}', StackTrace: {}", e.getMessage(), e);
 		}
 		return null;
 	}

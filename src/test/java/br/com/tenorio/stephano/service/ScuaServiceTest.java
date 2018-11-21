@@ -10,6 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.tenorio.stephano.BatchTrelloApplication;
 
+import java.util.List;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {BatchTrelloApplication.class})
 public class ScuaServiceTest {
@@ -19,7 +21,7 @@ public class ScuaServiceTest {
 
 	@Test
 	public void testGetCookie() {
-		String response = scuaService.getCookie(); 
+		List<String> response = scuaService.getCookies();
 		assertTrue(response != null && !response.isEmpty());
 	}
 	
